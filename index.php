@@ -16,16 +16,16 @@ if (file_exists($filename)) {
 
 if (isset($_GET['remove'])) {
 
-    $i = $_GET['remove'];
-    unset($data[$i]);
+    $remove_i = $_GET['remove'];
+    unset($data[$remove_i]);
     $data = array_values($data);
 
 }
 
 if (isset($_GET['done'])) {
 
-    $i = $_GET['done'];
-    $data[$i]["done"] = true;
+    $done_i = $_GET['done'];
+    $data[$done_i]["done"] = true;
 
 }
 ?>
@@ -43,6 +43,7 @@ if (isset($_GET['done'])) {
             <form class="add-form" action="index.php" method="POST">
                 <label for="todo-item">Add an item</label>
                 <input type="text" id="todo-item" name="todo-item" value="">
+                <input type="hidden" name="action" value="add-item">
                 <input type="submit" value="Add">
             </form>
         </div>
@@ -52,32 +53,74 @@ if (isset($_GET['done'])) {
         <div class="list-container">
 
             <?php
+
             if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-                $newTask = [
-                    "task" => htmlspecialchars($_POST['todo-item']),
-                    "done" => false
-                ];
+                if ($_POST["action"] == "add-item") {
+                    $newTask = [
+                        "task" => htmlspecialchars($_POST['todo-item']),
+                        "done" => false
+                    ];
 
-                $data[] = $newTask;
+                    $data[] = $newTask;
+
+                } else if ($_POST["action"] == "edit-item") {
+
+
+                    $index = $_POST["edit-index"];
+                    $data[$index]["task"] = htmlspecialchars($_POST['edit-item']);
+
+                }
+
             }
 
             $counter = 0;
             foreach ($data as $item) {
 
-                echo '<div class="list-item"><p>';
-                echo $item["task"];
-                echo "</p>";
-                echo '<div class="controls-container">';
+                $editing = false;
 
-                if ($item["done"]) {
-                    echo '<div class="fake-done">✓</div>';
+                echo '<div class="list-item"><p>';
+
+                if (isset($_GET['edit'])) {
+
+                    $edit_i = $_GET['edit'];
+
+                    if ($counter == $edit_i) {
+                        $editing = true;
+
+                        $form_text = $data[$edit_i]['task'];
+
+                        echo '<div class="form-container">';
+                        echo '<form class="edit-form" action="index.php" method="POST">';
+                        echo '<label for="edit-item"></label>';
+                        echo "<input type=\"text\" id=\"edit-item\" name=\"edit-item\" value=\"$form_text\">";
+                        echo '<input type="hidden" name="action" value="edit-item">';
+                        echo "<input type=\"hidden\" name=\"edit-index\" value=$edit_i>";
+                        echo '<input type="submit" value="Save">';
+                        echo '</form>';
+                        echo '</div>';
+                    }
+
                 } else {
-                    echo "<button onclick=\"location.href='?done=$counter'\" class=\"done-button\">✓</button>";
+                    $edit_i = 999;
                 }
 
-                echo "<button onclick=\"location.href='?remove=$counter'\" class=\"delete-button\">X</button>";
-                echo "</div>";
+
+                if (!$editing) {
+                    echo $item["task"];
+
+                    echo '<div class="controls-container">';
+
+                    if ($item["done"]) {
+                        echo '<div class="fake-done">✓</div>';
+                    } else {
+                        echo "<button onclick=\"location.href='?done=$counter'\" class=\"done-button\">✓</button>";
+                    }
+
+                    echo "<button onclick=\"location.href='?edit=$counter'\" class=\"edit-button\">Edit</button>";
+                    echo "<button onclick=\"location.href='?remove=$counter'\" class=\"delete-button\">X</button>";
+                    echo "</div>";
+                }
                 echo "</div>";
 
                 $counter += 1;
