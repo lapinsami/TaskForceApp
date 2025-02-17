@@ -21,6 +21,13 @@ if (isset($_GET['remove'])) {
     $data = array_values($data);
 
 }
+
+if (isset($_GET['done'])) {
+
+    $i = $_GET['done'];
+    $data[$i]["done"] = true;
+
+}
 ?>
 
 <!DOCTYPE html>
@@ -58,7 +65,16 @@ if (isset($_GET['remove'])) {
                 echo '<div class="list-item"><p>';
                 echo $item["task"];
                 echo "</p>";
+                echo '<div class="controls-container">';
+
+                if ($item["done"]) {
+                    echo '<div class="fake-done">✓</div>';
+                } else {
+                    echo "<button onclick=\"location.href='?done=$counter'\" class=\"done-button\">✓</button>";
+                }
+
                 echo "<button onclick=\"location.href='?remove=$counter'\" class=\"delete-button\">X</button>";
+                echo "</div>";
                 echo "</div>";
 
                 $counter += 1;

@@ -48,6 +48,11 @@ body {
     background-color: #2e2e2e;
 }
 
+.controls-container {
+    display: flex;
+    justify-content: end;
+}
+
 .list-item > p {
     margin-left: 15px;
     margin-top: 25px;
@@ -103,4 +108,26 @@ input[type=text] {
     height: 50px;
     margin-top: 25px;
     margin-right: 15px;
+}
+
+.done-button {
+    background-color: #999999;
+    border: none;
+    color: #2e2e2e;
+    padding: 16px 32px;
+    text-decoration: none;
+    cursor: pointer;
+    height: 50px;
+    margin-top: 25px;
+    margin-right: 15px;
+}
+
+.fake-done {
+    color: green;
+    padding: 16px 32px;
+    text-decoration: none;
+    height: 25px;
+    margin-top: 10px;
+    margin-right: 15px;
+    font-size: 36px;
 }
