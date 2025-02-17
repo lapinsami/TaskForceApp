@@ -6,14 +6,6 @@ html {
     background-color: #212121;
 }
 
-main {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100vh;
-    background-color: #212121;
-}
-
 body {
     margin: 0;
     padding: 0;
@@ -25,8 +17,8 @@ body {
 .page-container {
     display: flex;
     justify-content: center;
+    align-items: start;
     width: 100%;
-    height: 100%;
 }
 
 .list-container {
@@ -59,12 +51,11 @@ body {
 }
 
 .form-container {
-    margin-top: 250px;
-    margin-bottom: 25px;
+    margin-top: 25px;
     font-size: 36px;
     color: #999999;
     height: 100px;
-    width: 100%;
+    width: 800px;
 }
 
 .add-form {

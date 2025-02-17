@@ -39,14 +39,17 @@ if (isset($_GET['done'])) {
 </head>
 <body>
     <div class="page-container">
+        <div class="form-container">
+            <form class="add-form" action="index.php" method="POST">
+                <label for="todo-item">Add an item</label>
+                <input type="text" id="todo-item" name="todo-item" value="">
+                <input type="submit" value="Add">
+            </form>
+        </div>
+    </div>
+
+    <div class="page-container">
         <div class="list-container">
-            <div class="form-container">
-                <form class="add-form" action="index.php" method="POST">
-                    <label for="todo-item">Add an item</label>
-                    <input type="text" id="todo-item" name="todo-item" value="">
-                    <input type="submit" value="Add">
-                </form>
-            </div>
 
             <?php
             if ($_SERVER["REQUEST_METHOD"] == "POST") {
