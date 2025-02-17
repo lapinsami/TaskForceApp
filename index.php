@@ -14,34 +14,13 @@ if (file_exists($filename)) {
     }
 }
 
-if (count($data) < 1) {
-    $firstTask = [
-        "task" => "Finish html",
-        "done" => true
-    ];
+if (isset($_GET['remove'])) {
 
-    $secondTask = [
-        "task" => "Add php",
-        "done" => false
-    ];
+    $i = $_GET['remove'];
+    unset($data[$i]);
+    $data = array_values($data);
 
-    $thirdTask = [
-        "task" => "Submit",
-        "done" => false
-    ];
-
-    $fourthTask = [
-        "task" => "Play SoT",
-        "done" => false
-    ];
-
-    $data[][0] = $firstTask;
-    $data[][1] = $secondTask;
-    $data[][2] = $thirdTask;
-    $data[][3] = $fourthTask;
 }
-
-file_put_contents($filename, json_encode($data, JSON_PRETTY_PRINT));
 ?>
 
 <!DOCTYPE html>
@@ -55,24 +34,38 @@ file_put_contents($filename, json_encode($data, JSON_PRETTY_PRINT));
     <div class="page-container">
         <div class="list-container">
             <div class="form-container">
-                <form class="add-form" action="/index.php?add=todo-item">
+                <form class="add-form" action="index.php" method="POST">
                     <label for="todo-item">Add an item</label>
                     <input type="text" id="todo-item" name="todo-item" value="">
                     <input type="submit" value="Add">
                 </form>
             </div>
-            <div class="list-item">
-                <p>Finish html</p>
-            </div>
-            <div class="list-item">
-                <p>Add php</p>
-            </div>
-            <div class="list-item">
-                <p>Submit</p>
-            </div>
-            <div class="list-item">
-                <p>Play SoT</p>
-            </div>
+
+            <?php
+            if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+                $newTask = [
+                    "task" => htmlspecialchars($_POST['todo-item']),
+                    "done" => false
+                ];
+
+                $data[] = $newTask;
+            }
+
+            $counter = 0;
+            foreach ($data as $item) {
+
+                echo '<div class="list-item"><p>';
+                echo $item["task"];
+                echo "</p>";
+                echo "<button onclick=\"location.href='?remove=$counter'\" class=\"delete-button\">X</button>";
+                echo "</div>";
+
+                $counter += 1;
+            }
+
+            file_put_contents($filename, json_encode($data, JSON_PRETTY_PRINT));
+            ?>
         </div>
     </div>
 </body>
